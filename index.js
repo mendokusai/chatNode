@@ -17,51 +17,48 @@ app.set('Access-Control-Allow-Credentials', true);
 app.set('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
 app.set('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');
 
-// // var username = confirm("Username?");
-// var url = "http://yaps.herokuapp.com/"
 console.log("\n\n\n\n\n\nWHAT THE FUCK\n\n\n\n\n\n")
-debugger;
 
-var url = "/";
+// var url = "/";
 
-app.get(url, function(req, res){
-  res.sendfile('index.html');
-});
-
-io.on('connection', function(socket){
-	console.log('a user connected');
-	socket.on('disconnect', function(){
-		console.log('user disconnected');
-	});
-});
-
-io.on('connection', function(socket){
-	socket.on('chat message', function(msg){
-		console.log('message: ' + msg);
-	});
-});
-
-// // // broadcast to all
-// // io.emit('some event', { for: 'everyone' });
-
-// // // broadcast to everyone except for certain socket
-// // io.on('connection', function(socket){
-// // 	socket.broadcast.emit('hi');
-// // });
-
-io.on('connection', function(socket){
-	socket.on('chat message', function(msg){
-		io.emit('chat message', msg);
-	});
-});
-
-// // http.listen(3001, function(){
-// //   console.log('listening on *:3001');
-// // });
-
-
-// http.listen(url, function(){
-//   console.log('listening to' + url);
+// app.get(url, function(req, res){
+//   res.sendfile('index.html');
 // });
 
-// // io.connect('http://yaps.herokuapp.com');
+// io.on('connection', function(socket){
+// 	console.log('a user connected');
+// 	socket.on('disconnect', function(){
+// 		console.log('user disconnected');
+// 	});
+// });
+
+// io.on('connection', function(socket){
+// 	socket.on('chat message', function(msg){
+// 		console.log('message: ' + msg);
+// 	});
+// });
+
+// // // // broadcast to all
+// // // io.emit('some event', { for: 'everyone' });
+
+// // // // broadcast to everyone except for certain socket
+// // // io.on('connection', function(socket){
+// // // 	socket.broadcast.emit('hi');
+// // // });
+
+// io.on('connection', function(socket){
+// 	socket.on('chat message', function(msg){
+// 		io.emit('chat message', msg);
+// 	});
+// });
+
+// // // http.listen(3001, function(){
+// // //   console.log('listening on *:3001');
+// // // });
+
+
+// // http.listen(url, function(){
+// //   console.log('listening to' + url);
+// // });
+
+// // // io.connect('http://yaps.herokuapp.com');
