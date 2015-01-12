@@ -1,67 +1,87 @@
-// var allowCrossDomain = function(req, res, next) {
-//     res.header('Access-Control-Allow-Origin', '*');
-//     res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
-//     res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');
+// // var allowCrossDomain = function(req, res, next) {
+// //     res.header('Access-Control-Allow-Origin', '*');
+// //     res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+// //     res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');
 
-//     // intercept OPTIONS method
-//     if ('OPTIONS' == req.method) {
-//       res.send(200);
-//     }
-//     else {
-//       next();
-//     }
-// };
+// //     // intercept OPTIONS method
+// //     if ('OPTIONS' == req.method) {
+// //       res.send(200);
+// //     }
+// //     else {
+// //       next();
+// //     }
+// // };
 
-var app = require('express')();
-var http = require('http').Server(app);
-// var cors = require('cors');
-var io = require('socket.io')(http);
+// var app = require('express')();
+// var http = require('http').Server(app);
+// // var cors = require('cors');
+// var io = require('socket.io')(http);
 
-io.set('transports', [
-<<<<<<< HEAD
-          'websocket',
-          'flashsocket',
-          'htmlfile', 
-          'xhr-polling',
-          'jsonp-polling'
-        ]);
-=======
-        	'websocket',
-        	'flashsocket',
-        	'htmlfile', 
-        	'xhr-polling',
-        	'jsonp-polling'
-		    ]);
->>>>>>> 4a9e586d826319780e719869f8a1b9a45684e068
+// io.set('transports', [
+// <<<<<<< HEAD
+//           'websocket',
+//           'flashsocket',
+//           'htmlfile', 
+//           'xhr-polling',
+//           'jsonp-polling'
+//         ]);
+// =======
+//         	'websocket',
+//         	'flashsocket',
+//         	'htmlfile', 
+//         	'xhr-polling',
+//         	'jsonp-polling'
+// 		    ]);
+// >>>>>>> 4a9e586d826319780e719869f8a1b9a45684e068
 
-// io.configure( function(){
-    io.set('origin', '*:*');
-    // io.set('origins', "http://yaps.herokuapp.com" );
-// });
-// io.set("origins", "https://yaps.herokuapp.com");
-// io.set("origins","*:*");
+// // io.configure( function(){
+//     io.set('origin', '*:*');
+//     // io.set('origins', "http://yaps.herokuapp.com" );
+// // });
+// // io.set("origins", "https://yaps.herokuapp.com");
+// // io.set("origins","*:*");
 
-// Enables CORS
-// var enableCORS = function(req, res, next) {
-//     res.header('Access-Control-Allow-Origin', '*');
-//     res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
-//     res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');
+// // Enables CORS
+// // var enableCORS = function(req, res, next) {
+// //     res.header('Access-Control-Allow-Origin', '*');
+// //     res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+// //     res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');
  
-//     // intercept OPTIONS method
-//     if ('OPTIONS' == req.method) {
-//       res.send(200);
-//     }
-//     else {
-//       next();
-//     }
-// };
+// //     // intercept OPTIONS method
+// //     if ('OPTIONS' == req.method) {
+// //       res.send(200);
+// //     }
+// //     else {
+// //       next();
+// //     }
+// // };
  
  
-// // enable CORS!
-// app.use(enableCORS);
-// app.use(cors({credentials: true}));
+// // // enable CORS!
+// // app.use(enableCORS);
+// // app.use(cors({credentials: true}));
 
-<<<<<<< HEAD
+// <<<<<<< HEAD
+// // var allowCrossDomain = function(req, res, next) {
+// //     res.header('Access-Control-Allow-Origin', '*:*');
+// //     res.header('Access-Control-Allow-Credentials', true);
+// //     res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+// //     res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');
+// //     // debugger;
+// //     // intercept OPTIONS method
+// //     if ('OPTIONS' == req.method) {
+// //       res.send(200);
+// //     }
+// //     else {
+// //       next();
+// //     }
+// // };
+
+// // // app.use(allowCrossDomain);
+
+// // app.use(allowCrossDomain);
+
+// =======
 // var allowCrossDomain = function(req, res, next) {
 //     res.header('Access-Control-Allow-Origin', '*:*');
 //     res.header('Access-Control-Allow-Credentials', true);
@@ -81,115 +101,95 @@ io.set('transports', [
 
 // app.use(allowCrossDomain);
 
-=======
-var allowCrossDomain = function(req, res, next) {
-    res.header('Access-Control-Allow-Origin', '*:*');
-    res.header('Access-Control-Allow-Credentials', true);
-    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
-    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');
-    // debugger;
-    // intercept OPTIONS method
-    if ('OPTIONS' == req.method) {
-      res.send(200);
-    }
-    else {
-      next();
-    }
-};
+// >>>>>>> 4a9e586d826319780e719869f8a1b9a45684e068
+// // // app.configure(function () {
+// // //   app.use(express.bodyParser());
+// // //   app.use(express.methodOverride());
+// // //   app.use(allowCrossDomain);
+// // //   app.use(app.router);
+// // //   app.use(express.static(path.join(application_root, "public")));
+// // //   app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
+// // // });
+// // // io.configure(function () { 
+// // //   io.set("transports", ["xhr-polling"]); 
+// // //   io.set("polling duration", 10); 
+// // // });
 
-// app.use(allowCrossDomain);
+// // // var cors = require('cors'); app.use(cors());
 
-app.use(allowCrossDomain);
+// // // io.set('transports', [            // all transports (optional if you want flashsocket)
+// // //         'websocket'
+// // //         , 'flashsocket'
+// // //         , 'htmlfile'
+// // //         , 'xhr-polling'
+// // //         , 'jsonp-polling'
+// // //     ]);
+// // // io.set('origins', '*:*');
 
->>>>>>> 4a9e586d826319780e719869f8a1b9a45684e068
-// // app.configure(function () {
-// //   app.use(express.bodyParser());
-// //   app.use(express.methodOverride());
-// //   app.use(allowCrossDomain);
-// //   app.use(app.router);
-// //   app.use(express.static(path.join(application_root, "public")));
-// //   app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
-// // });
-// // io.configure(function () { 
-// //   io.set("transports", ["xhr-polling"]); 
-// //   io.set("polling duration", 10); 
-// // });
+// // // app.configure(function () {
+// // //   app.use(allowCrossDomain);
+// // //   app.use(express.bodyParser());
+// // //   app.use(express.methodOverride());
+// // //   app.use(app.router);
+// // //   app.use(express.static(path.join(application_root, "public")));
+// // //   app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
+// // // });
 
-// // var cors = require('cors'); app.use(cors());
+// // // var username = confirm("Username?");
+// // var url = "http://yaps.herokuapp.com/"
 
-// // io.set('transports', [            // all transports (optional if you want flashsocket)
-// //         'websocket'
-// //         , 'flashsocket'
-// //         , 'htmlfile'
-// //         , 'xhr-polling'
-// //         , 'jsonp-polling'
-// //     ]);
-// // io.set('origins', '*:*');
+// // // app.use(allowCrossDomain);
 
-// // app.configure(function () {
-// //   app.use(allowCrossDomain);
-// //   app.use(express.bodyParser());
-// //   app.use(express.methodOverride());
-// //   app.use(app.router);
-// //   app.use(express.static(path.join(application_root, "public")));
-// //   app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
+// // app.get(url, function(req, res){
+// //   res.sendfile('index.html');
 // // });
 
-// // var username = confirm("Username?");
-// var url = "http://yaps.herokuapp.com/"
-
-// // app.use(allowCrossDomain);
-
-// app.get(url, function(req, res){
-//   res.sendfile('index.html');
-// });
-
-// io.on('connection', function(socket){
-//   console.log('a user connected');
-//   socket.on('chat message', function(msg){
-<<<<<<< HEAD
-//     console.log('message: ' + msg);
-=======
-//   	console.log('message: ' + msg);
->>>>>>> 4a9e586d826319780e719869f8a1b9a45684e068
-//   });
-// });
-
-// // // broadcast to all
-// // io.emit('some event', { for: 'everyone' });
-
-// // // broadcast to everyone except for certain socket
 // // io.on('connection', function(socket){
-<<<<<<< HEAD
-// //  socket.broadcast.emit('hi');
+// //   console.log('a user connected');
+// //   socket.on('chat message', function(msg){
+// <<<<<<< HEAD
+// //     console.log('message: ' + msg);
+// =======
+// //   	console.log('message: ' + msg);
+// >>>>>>> 4a9e586d826319780e719869f8a1b9a45684e068
+// //   });
 // // });
 
-// io.on('connection', function(socket){
-//   socket.on('chat message', function(msg){
-//     io.emit('chat message', msg);
-//   });
-=======
-// // 	socket.broadcast.emit('hi');
+// // // // broadcast to all
+// // // io.emit('some event', { for: 'everyone' });
+
+// // // // broadcast to everyone except for certain socket
+// // // io.on('connection', function(socket){
+// <<<<<<< HEAD
+// // //  socket.broadcast.emit('hi');
+// // // });
+
+// // io.on('connection', function(socket){
+// //   socket.on('chat message', function(msg){
+// //     io.emit('chat message', msg);
+// //   });
+// =======
+// // // 	socket.broadcast.emit('hi');
+// // // });
+
+// // io.on('connection', function(socket){
+// // 	socket.on('chat message', function(msg){
+// // 		io.emit('chat message', msg);
+// // 	});
+// >>>>>>> 4a9e586d826319780e719869f8a1b9a45684e068
 // // });
 
-// io.on('connection', function(socket){
-// 	socket.on('chat message', function(msg){
-// 		io.emit('chat message', msg);
-// 	});
->>>>>>> 4a9e586d826319780e719869f8a1b9a45684e068
-// });
+// // // http.listen(3001, function(){
+// // //   console.log('listening on *:3001');
+// // // });
 
-// // http.listen(3001, function(){
-// //   console.log('listening on *:3001');
+
+// // http.listen(url, function(){
+// //   console.log('listening to' + url);
 // // });
 
-
-// http.listen(url, function(){
-//   console.log('listening to' + url);
-// });
-
-<<<<<<< HEAD
-// io.connect('http://yaps.herokuapp.com');
-=======
+// <<<<<<< HEAD
 // // io.connect('http://yaps.herokuapp.com');
->>>>>>> 4a9e586d826319780e719869f8a1b9a45684e068
+// =======
+// // // io.connect('http://yaps.herokuapp.com');
+// >>>>>>> 4a9e586d826319780e719869f8a1b9a45684e068
