@@ -3,7 +3,11 @@ var app = require('express')();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 
-app.use( '*', cors() );
+http.listen(config.port, function () {
+    console.log('Express server listening on port %d in %s mode', config.port, app.get('env'));
+});
+
+app.use( cors() );
 
 app.listen(process.env.PORT || 3000, function(){
   console.log("Express server listening on port %d in %s mode", this.address().port, app.settings.env);
