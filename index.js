@@ -1,108 +1,44 @@
-// var allowCrossDomain = function(req, res, next) {
-//     res.header('Access-Control-Allow-Origin', '*');
-//     res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
-//     res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');
-
-//     // intercept OPTIONS method
-//     if ('OPTIONS' == req.method) {
-//       res.send(200);
-//     }
-//     else {
-//       next();
-//     }
-// };
-
 var app = require('express')();
 var http = require('http').Server(app);
-// var cors = require('cors');
 var io = require('socket.io')(http);
 
-// io.set('transports', [
-//         	'websocket',
-//         	'flashsocket',
-//         	'htmlfile', 
-//         	'xhr-polling',
-//         	'jsonp-polling'
-// 		    ]);
+io.set('transports', [
+    	'websocket',
+    	'flashsocket',
+    	'htmlfile', 
+    	'xhr-polling',
+    	'jsonp-polling'
+    ]);
 
-// // io.configure( function(){
-//     io.set('origin', '*:*');
-    // io.set('origins', "http://yaps.herokuapp.com" );
-// });
-// io.set("origins", "https://yaps.herokuapp.com");
 io.set("origins","*:*");
 
-// Enables CORS
-// var enableCORS = function(req, res, next) {
-//     res.header('Access-Control-Allow-Origin', '*');
-//     res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
-//     res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');
- 
-//     // intercept OPTIONS method
-//     if ('OPTIONS' == req.method) {
-//       res.send(200);
-//     }
-//     else {
-//       next();
-//     }
-// };
- 
- 
-// // enable CORS!
-// app.use(enableCORS);
-// app.use(cors({credentials: true}));
-
-// var allowCrossDomain = function(req, res, next) {
-//     res.header('Access-Control-Allow-Origin', '*:*');
-//     res.header('Access-Control-Allow-Credentials', true);
-//     res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
-//     res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');
-//     // debugger;
-//     // intercept OPTIONS method
-//     if ('OPTIONS' == req.method) {
-//       res.send(200);
-//     }
-//     else {
-//       next();
-//     }
-// };
+var allowCrossDomain = function(req, res, next) {
+    res.header('Access-Control-Allow-Origin', '*:*');
+    res.header('Access-Control-Allow-Credentials', true);
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');
+    if ('OPTIONS' == req.method) {
+      res.send(200);
+    }
+    else {
+      next();
+    }
+};
 
 // app.use(allowCrossDomain);
 
-// app.use(allowCrossDomain);
-
-// // app.configure(function () {
-// //   app.use(express.bodyParser());
-// //   app.use(express.methodOverride());
-// //   app.use(allowCrossDomain);
-// //   app.use(app.router);
-// //   app.use(express.static(path.join(application_root, "public")));
-// //   app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
-// // });
-// // io.configure(function () { 
-// //   io.set("transports", ["xhr-polling"]); 
-// //   io.set("polling duration", 10); 
-// // });
-
-// // var cors = require('cors'); app.use(cors());
-
-// // io.set('transports', [            // all transports (optional if you want flashsocket)
-// //         'websocket'
-// //         , 'flashsocket'
-// //         , 'htmlfile'
-// //         , 'xhr-polling'
-// //         , 'jsonp-polling'
-// //     ]);
-// // io.set('origins', '*:*');
-
-// // app.configure(function () {
-// //   app.use(allowCrossDomain);
-// //   app.use(express.bodyParser());
-// //   app.use(express.methodOverride());
-// //   app.use(app.router);
-// //   app.use(express.static(path.join(application_root, "public")));
-// //   app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
-// // });
+app.configure(function () {
+  app.use(express.bodyParser());
+  app.use(express.methodOverride());
+  app.use(allowCrossDomain);
+  app.use(app.router);
+  app.use(express.static(path.join(application_root, "public")));
+  app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
+});
+io.configure(function () { 
+  io.set("transports", ["xhr-polling"]); 
+  io.set("polling duration", 10); 
+});
 
 // // var username = confirm("Username?");
 // var url = "http://yaps.herokuapp.com/"
