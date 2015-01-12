@@ -18,15 +18,15 @@ var http = require('http').Server(app);
 var io = require('socket.io')(http);
 
 io.set('transports', [
-        	'websocket',
-        	'flashsocket',
-        	'htmlfile', 
-        	'xhr-polling',
-        	'jsonp-polling'
-		    ]);
+          'websocket',
+          'flashsocket',
+          'htmlfile', 
+          'xhr-polling',
+          'jsonp-polling'
+        ]);
 
 // io.configure( function(){
-    io.set('origin', '*');
+    io.set('origin', '*:*');
     // io.set('origins', "http://yaps.herokuapp.com" );
 // });
 // io.set("origins", "https://yaps.herokuapp.com");
@@ -69,14 +69,16 @@ var allowCrossDomain = function(req, res, next) {
 
 // app.use(allowCrossDomain);
 
-app.configure(function () {
-  app.use(express.bodyParser());
-  app.use(express.methodOverride());
-  app.use(allowCrossDomain);
-  app.use(app.router);
-  app.use(express.static(path.join(application_root, "public")));
-  app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
-});
+app.use(allowCrossDomain);
+
+// app.configure(function () {
+//   app.use(express.bodyParser());
+//   app.use(express.methodOverride());
+//   app.use(allowCrossDomain);
+//   app.use(app.router);
+//   app.use(express.static(path.join(application_root, "public")));
+//   app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
+// });
 // io.configure(function () { 
 //   io.set("transports", ["xhr-polling"]); 
 //   io.set("polling duration", 10); 
@@ -114,7 +116,7 @@ app.get(url, function(req, res){
 io.on('connection', function(socket){
   console.log('a user connected');
   socket.on('chat message', function(msg){
-  	console.log('message: ' + msg);
+    console.log('message: ' + msg);
   });
 });
 
@@ -123,13 +125,13 @@ io.on('connection', function(socket){
 
 // // broadcast to everyone except for certain socket
 // io.on('connection', function(socket){
-// 	socket.broadcast.emit('hi');
+//  socket.broadcast.emit('hi');
 // });
 
 io.on('connection', function(socket){
-	socket.on('chat message', function(msg){
-		io.emit('chat message', msg);
-	});
+  socket.on('chat message', function(msg){
+    io.emit('chat message', msg);
+  });
 });
 
 // http.listen(3001, function(){
@@ -141,44 +143,4 @@ http.listen(url, function(){
   console.log('listening to' + url);
 });
 
-// var app = require('express')();
-// var http = require('http').Server(app);
-// var io = require('socket.io')(http);
-
-
-// // var username = confirm("Username?");
-// var url = "http://yaps.herokuapp.com/"
-
-// app.get(url, function(req, res){
-//   res.sendfile('index.html');
-// });
-
-// io.on('connection', function(socket){
-//   console.log('a user connected');
-//   socket.on('chat message', function(msg){
-//   	console.log('message: ' + msg);
-//   });
-// });
-
-// // // broadcast to all
-// // io.emit('some event', { for: 'everyone' });
-
-// // // broadcast to everyone except for certain socket
-// // io.on('connection', function(socket){
-// // 	socket.broadcast.emit('hi');
-// // });
-
-// io.on('connection', function(socket){
-// 	socket.on('chat message', function(msg){
-// 		io.emit('chat message', msg);
-// 	});
-// });
-
-// // http.listen(3001, function(){
-// //   console.log('listening on *:3001');
-// // });
-
-
-// http.listen(url, function(){
-//   console.log('listening to' + url);
-// });
+// io.connect('http://yaps.herokuapp.com');
