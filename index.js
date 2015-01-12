@@ -2,6 +2,8 @@ var app = require('express')();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 
+var username = confirm("Username?");
+
 app.get('/', function(req, res){
   res.sendfile('index.html');
 });
@@ -14,7 +16,7 @@ io.on('connection', function(socket){
 });
 
 // // broadcast to all
-io.emit('some event', { for: 'everyone' });
+// io.emit('some event', { for: 'everyone' });
 
 // // broadcast to everyone except for certain socket
 // io.on('connection', function(socket){
@@ -28,6 +30,6 @@ io.on('connection', function(socket){
 });
 
 
-http.listen(3000, function(){
-  console.log('listening on *:3000');
+http.listen(3001, function(){
+  console.log('listening on *:3001');
 });
