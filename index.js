@@ -26,7 +26,7 @@ io.set('transports', [
 		    ]);
 
 // io.configure( function(){
-    io.set('origin', '*');
+    io.set('origin', '*:*');
     // io.set('origins', "http://yaps.herokuapp.com" );
 // });
 // io.set("origins", "https://yaps.herokuapp.com");
