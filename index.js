@@ -38,10 +38,18 @@ var allowCrossDomain = function(req, res, next) {
 app.use(allowCrossDomain);
 
 
+var whitelist = ['http://yaps.herokuapp.com', 'http://yapsnode.herokuapp.com', 'https://yaps.herokuapp.com', 'https://yapsnode.herokuapp.com'];
+
+var corsOptions = {
+  origin: function(origin, callback){
+    var originIsWhitelisted = whitelist.indexOf(origin) !== -1;
+    callback(null, originIsWhitelisted);
+  }
+};
 
 var url = "/";
 
-app.get(url, cors(), function(req, res){
+app.get(url, cors(corsOptions), function(req, res){
   res.sendfile('index.html');
 });
 
