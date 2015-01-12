@@ -23,6 +23,7 @@ io.set('transports', [            // all transports (optional if you want flashs
         , 'xhr-polling'
         , 'jsonp-polling'
     ]);
+io.set('origins', '*:*');
 
 app.configure(function () {
   app.use(allowCrossDomain);
@@ -35,6 +36,8 @@ app.configure(function () {
 
 // var username = confirm("Username?");
 var url = "http://yaps.herokuapp.com/"
+
+app.use(allowCrossDomain);
 
 app.get(url, function(req, res){
   res.sendfile('index.html');
