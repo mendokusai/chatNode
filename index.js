@@ -140,3 +140,5 @@ io.on('connection', function(socket){
 http.listen(url, function(){
   console.log('listening to' + url);
 });
+
+io.connect('http://yaps.herokuapp.com');
