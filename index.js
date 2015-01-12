@@ -14,7 +14,13 @@ var allowCrossDomain = function(req, res, next) {
 
 var app = require('express')();
 var http = require('http').Server(app);
-var io = require('socket.io')(http, { origins: "http://yaps.herokuapp.com/" });
+var io = require('socket.io')(http);
+io.set('origins', "http://yaps.herokuapp.com/" );
+
+io.configure(function () { 
+  io.set("transports", ["xhr-polling"]); 
+  io.set("polling duration", 10); 
+});
 
 var cors = require('cors'); app.use(cors());
 
