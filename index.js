@@ -26,7 +26,7 @@ io.set('transports', [
 		    ]);
 io.configure( function(){
     // io.set('origin', '*');
-    io.set('origins', "*:*" );
+    io.set('origins', "http://yaps.herokuapp.com" );
 });
 // io.set("origins", "https://yaps.herokuapp.com");
 // io.set("origins","*:*");
@@ -52,7 +52,7 @@ io.configure( function(){
 app.use(cors({credentials: true}));
 
 var allowCrossDomain = function(req, res, next) {
-    res.header('Access-Control-Allow-Origin', 'https://yaps.herokuapp.com');
+    res.header('Access-Control-Allow-Origin', 'http://yaps.herokuapp.com');
     res.header('Access-Control-Allow-Credentials', true);
     res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
     res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');
