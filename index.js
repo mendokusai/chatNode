@@ -25,10 +25,10 @@ io.set('transports', [
         	'jsonp-polling'
 		    ]);
 
-io.configure( function(){
+// io.configure( function(){
     io.set('origin', '*');
     // io.set('origins', "http://yaps.herokuapp.com" );
-});
+// });
 // io.set("origins", "https://yaps.herokuapp.com");
 // io.set("origins","*:*");
 
