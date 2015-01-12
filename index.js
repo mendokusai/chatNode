@@ -12,6 +12,10 @@ var allowCrossDomain = function(req, res, next) {
     }
 };
 
+var app = require('express')();
+var http = require('http').Server(app);
+var io = require('socket.io')(http);
+
 app.configure(function () {
   app.use(allowCrossDomain);
   app.use(express.bodyParser());
@@ -20,11 +24,6 @@ app.configure(function () {
   app.use(express.static(path.join(application_root, "public")));
   app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
 });
-
-var app = require('express')();
-var http = require('http').Server(app);
-var io = require('socket.io')(http);
-
 
 // var username = confirm("Username?");
 var url = "http://yaps.herokuapp.com/"
