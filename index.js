@@ -17,6 +17,13 @@ var http = require('http').Server(app);
 var io = require('socket.io')(http);
 // io.set('origins', "http://yaps.herokuapp.com/" );
 
+app.use(function(req, res, next) {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, PATCH, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Content-Type');
+  return next();
+});
+
 // io.configure(function () { 
 //   io.set("transports", ["xhr-polling"]); 
 //   io.set("polling duration", 10); 
