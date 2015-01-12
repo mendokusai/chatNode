@@ -11,11 +11,12 @@ io.set('transports', [
     ]);
 
 io.set("origins","*:*");
+io.set('Access-Control-Allow-Origin', '*:*');
+io.set('Access-Control-Allow-Credentials', true);
+io.set('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+io.set('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');
 
-app.set('Access-Control-Allow-Origin', '*:*');
-app.set('Access-Control-Allow-Credentials', true);
-app.set('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
-app.set('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');
+console.log("\n\n\n\n\n\n\n\n\n\n\n\n", io, "\n\n\n\n\n\n\n\n\n\n\n\n\n");
 
 console.log("\n\n\n\n\n\nWHAT THE FUCK\n\n\n\n\n\n")
 
