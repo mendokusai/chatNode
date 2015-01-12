@@ -1,6 +1,7 @@
 var app = require('express')();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
+var cors = require('cors');
 
 app.listen(process.env.PORT || 3000, function(){
   console.log("Express server listening on port %d in %s mode", this.address().port, app.settings.env);
@@ -13,6 +14,10 @@ app.set('transports', [
     	'xhr-polling',
     	'jsonp-polling'
     ]);
+
+app.use( cors() );
+
+console.log("\n\n\n\n\n\n\nDID THIS SHIT HELP?\n\n\n\n\n\n\n\n")
 
 // res.header("origins","*:*");
 // res.header('Access-Control-Allow-Origin', '*:*');
