@@ -4,8 +4,9 @@ var io = require('socket.io')(http);
 
 
 // var username = confirm("Username?");
+var url = "http://yaps.herokuapp.com/"
 
-app.get('/', function(req, res){
+app.get(url, function(req, res){
   res.sendfile('index.html');
 });
 
@@ -33,7 +34,7 @@ io.on('connection', function(socket){
 // http.listen(3001, function(){
 //   console.log('listening on *:3001');
 // });
-var url = "http://yaps.herokuapp.com/"
+
 
 http.listen(url, function(){
   console.log('listening to' + url);
