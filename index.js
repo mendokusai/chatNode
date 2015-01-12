@@ -41,9 +41,9 @@ app.use(allowCrossDomain);
 
 // var url = "/";
 
-app.get("http://yaps.herokuapp.com", function(req, res){
-  res.sendfile('index.html');
-});
+// app.get("http://yaps.herokuapp.com", function(req, res){
+//   res.sendfile('index.html');
+// });
 
 io.on('connection', function(socket){
 	console.log('a user connected');
