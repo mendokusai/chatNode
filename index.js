@@ -143,4 +143,4 @@ http.listen(url, function(){
   console.log('listening to' + url);
 });
 
-io.connect('http://yaps.herokuapp.com');
+// io.connect('http://yaps.herokuapp.com');
