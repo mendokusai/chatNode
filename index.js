@@ -18,12 +18,21 @@ var http = require('http').Server(app);
 var io = require('socket.io')(http);
 
 io.set('transports', [
+<<<<<<< HEAD
           'websocket',
           'flashsocket',
           'htmlfile', 
           'xhr-polling',
           'jsonp-polling'
         ]);
+=======
+        	'websocket',
+        	'flashsocket',
+        	'htmlfile', 
+        	'xhr-polling',
+        	'jsonp-polling'
+		    ]);
+>>>>>>> 4a9e586d826319780e719869f8a1b9a45684e068
 
 // io.configure( function(){
     io.set('origin', '*:*');
@@ -52,6 +61,7 @@ io.set('transports', [
 // app.use(enableCORS);
 // app.use(cors({credentials: true}));
 
+<<<<<<< HEAD
 // var allowCrossDomain = function(req, res, next) {
 //     res.header('Access-Control-Allow-Origin', '*:*');
 //     res.header('Access-Control-Allow-Credentials', true);
@@ -71,6 +81,27 @@ io.set('transports', [
 
 // app.use(allowCrossDomain);
 
+=======
+var allowCrossDomain = function(req, res, next) {
+    res.header('Access-Control-Allow-Origin', '*:*');
+    res.header('Access-Control-Allow-Credentials', true);
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');
+    // debugger;
+    // intercept OPTIONS method
+    if ('OPTIONS' == req.method) {
+      res.send(200);
+    }
+    else {
+      next();
+    }
+};
+
+// app.use(allowCrossDomain);
+
+app.use(allowCrossDomain);
+
+>>>>>>> 4a9e586d826319780e719869f8a1b9a45684e068
 // // app.configure(function () {
 // //   app.use(express.bodyParser());
 // //   app.use(express.methodOverride());
@@ -116,7 +147,11 @@ io.set('transports', [
 // io.on('connection', function(socket){
 //   console.log('a user connected');
 //   socket.on('chat message', function(msg){
+<<<<<<< HEAD
 //     console.log('message: ' + msg);
+=======
+//   	console.log('message: ' + msg);
+>>>>>>> 4a9e586d826319780e719869f8a1b9a45684e068
 //   });
 // });
 
@@ -125,6 +160,7 @@ io.set('transports', [
 
 // // // broadcast to everyone except for certain socket
 // // io.on('connection', function(socket){
+<<<<<<< HEAD
 // //  socket.broadcast.emit('hi');
 // // });
 
@@ -132,6 +168,15 @@ io.set('transports', [
 //   socket.on('chat message', function(msg){
 //     io.emit('chat message', msg);
 //   });
+=======
+// // 	socket.broadcast.emit('hi');
+// // });
+
+// io.on('connection', function(socket){
+// 	socket.on('chat message', function(msg){
+// 		io.emit('chat message', msg);
+// 	});
+>>>>>>> 4a9e586d826319780e719869f8a1b9a45684e068
 // });
 
 // // http.listen(3001, function(){
@@ -143,4 +188,8 @@ io.set('transports', [
 //   console.log('listening to' + url);
 // });
 
+<<<<<<< HEAD
 // io.connect('http://yaps.herokuapp.com');
+=======
+// // io.connect('http://yaps.herokuapp.com');
+>>>>>>> 4a9e586d826319780e719869f8a1b9a45684e068
