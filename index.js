@@ -17,8 +17,6 @@ app.set('Access-Control-Allow-Credentials', true);
 app.set('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
 app.set('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');
 
-app.use(allowCrossDomain);
-
 // // var username = confirm("Username?");
 // var url = "http://yaps.herokuapp.com/"
 
