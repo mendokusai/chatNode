@@ -15,7 +15,7 @@
 var app = require('express')();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
-// io.set('origins', "http://yaps.herokuapp.com/" );
+io.set('origins', "*:*" );
 
 app.use(function(req, res, next) {
   res.header('Access-Control-Allow-Origin', '*');
