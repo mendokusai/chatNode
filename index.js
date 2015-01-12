@@ -1,7 +1,12 @@
 var cors = require('cors');
 var app = require('express')();
-var http = require('http').Server(app);
+var http = require('http').createServer(app);
 var io = require('socket.io')(http);
+
+// http.listen(80);
+http.listen(config.port, function () {
+    console.log('Express server listening on port %d in %s mode', config.port, app.get('env'));
+});
 
 // app.use( cors() );
 
