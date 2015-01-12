@@ -30,7 +30,11 @@ io.on('connection', function(socket){
 	});
 });
 
+// http.listen(3001, function(){
+//   console.log('listening on *:3001');
+// });
+var url = "http://yaps.herokuapp.com/"
 
-http.listen(3001, function(){
-  console.log('listening on *:3001');
+http.listen(url, function(){
+  console.log('listening to' + url);
 });
