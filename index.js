@@ -17,20 +17,20 @@ var http = require('http').Server(app);
 // var cors = require('cors');
 var io = require('socket.io')(http);
 
-io.set('transports', [
-        	'websocket',
-        	'flashsocket',
-        	'htmlfile', 
-        	'xhr-polling',
-        	'jsonp-polling'
-		    ]);
+// io.set('transports', [
+//         	'websocket',
+//         	'flashsocket',
+//         	'htmlfile', 
+//         	'xhr-polling',
+//         	'jsonp-polling'
+// 		    ]);
 
-// io.configure( function(){
-    io.set('origin', '*:*');
+// // io.configure( function(){
+//     io.set('origin', '*:*');
     // io.set('origins', "http://yaps.herokuapp.com" );
 // });
 // io.set("origins", "https://yaps.herokuapp.com");
-// io.set("origins","*:*");
+io.set("origins","*:*");
 
 // Enables CORS
 // var enableCORS = function(req, res, next) {
@@ -52,24 +52,24 @@ io.set('transports', [
 // app.use(enableCORS);
 // app.use(cors({credentials: true}));
 
-var allowCrossDomain = function(req, res, next) {
-    res.header('Access-Control-Allow-Origin', '*:*');
-    res.header('Access-Control-Allow-Credentials', true);
-    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
-    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');
-    // debugger;
-    // intercept OPTIONS method
-    if ('OPTIONS' == req.method) {
-      res.send(200);
-    }
-    else {
-      next();
-    }
-};
+// var allowCrossDomain = function(req, res, next) {
+//     res.header('Access-Control-Allow-Origin', '*:*');
+//     res.header('Access-Control-Allow-Credentials', true);
+//     res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+//     res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');
+//     // debugger;
+//     // intercept OPTIONS method
+//     if ('OPTIONS' == req.method) {
+//       res.send(200);
+//     }
+//     else {
+//       next();
+//     }
+// };
 
 // app.use(allowCrossDomain);
 
-app.use(allowCrossDomain);
+// app.use(allowCrossDomain);
 
 // // app.configure(function () {
 // //   app.use(express.bodyParser());
@@ -107,18 +107,25 @@ app.use(allowCrossDomain);
 // // var username = confirm("Username?");
 // var url = "http://yaps.herokuapp.com/"
 
-// // app.use(allowCrossDomain);
+var url = "/"
 
-// app.get(url, function(req, res){
-//   res.sendfile('index.html');
-// });
 
-// io.on('connection', function(socket){
-//   console.log('a user connected');
-//   socket.on('chat message', function(msg){
-//   	console.log('message: ' + msg);
-//   });
-// });
+app.get(url, function(req, res){
+  res.sendfile('index.html');
+});
+
+io.on('connection', function(socket){
+	console.log('a user connected');
+	socket.on('disconnect', function(){
+		console.log('user disconnected');
+	});
+});
+
+io.on('connection', function(socket){
+	socket.on('chat message', function(msg){
+		console.log('message: ' + msg);
+	});
+});
 
 // // // broadcast to all
 // // io.emit('some event', { for: 'everyone' });
@@ -128,11 +135,11 @@ app.use(allowCrossDomain);
 // // 	socket.broadcast.emit('hi');
 // // });
 
-// io.on('connection', function(socket){
-// 	socket.on('chat message', function(msg){
-// 		io.emit('chat message', msg);
-// 	});
-// });
+io.on('connection', function(socket){
+	socket.on('chat message', function(msg){
+		io.emit('chat message', msg);
+	});
+});
 
 // // http.listen(3001, function(){
 // //   console.log('listening on *:3001');
