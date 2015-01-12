@@ -39,11 +39,11 @@ app.use(allowCrossDomain);
 
 
 
-// var url = "/";
+var url = "/";
 
-// app.get("http://yaps.herokuapp.com", function(req, res){
-//   res.sendfile('index.html');
-// });
+app.get(url, cors(), function(req, res){
+  res.sendfile('index.html');
+});
 
 io.on('connection', function(socket){
 	console.log('a user connected');
