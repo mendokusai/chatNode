@@ -6,6 +6,15 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "ryan",
-  "license": "MIT"
+  "repository@1.0.0": {
+    "type": "git",
+    "url": "git@github.com:mendokusai/chatNode.git"
+  },
+  "author": "ryan & joel",
+  // "readme": "README.md",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.10.2",
+    "socket.io": "^1.2.1"
+  }
 }
