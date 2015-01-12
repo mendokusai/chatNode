@@ -14,7 +14,15 @@ var allowCrossDomain = function(req, res, next) {
 
 var app = require('express')();
 var http = require('http').Server(app);
-var io = require('socket.io')(http);
+var io = require('socket.io')(http, { origins: "http://yaps.herokuapp.com/" });
+
+io.set('transports', [            // all transports (optional if you want flashsocket)
+        'websocket'
+        , 'flashsocket'
+        , 'htmlfile'
+        , 'xhr-polling'
+        , 'jsonp-polling'
+    ]);
 
 app.configure(function () {
   app.use(allowCrossDomain);
