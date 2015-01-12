@@ -24,11 +24,11 @@ io.set('transports', [
         	'xhr-polling',
         	'jsonp-polling'
 		    ]);
-// io.configure( function(){
-//     io.set('origin', '*');
-//     io.set('origins', "*:*" );
-// });
-io.set("origins", "https://yaps.herokuapp.com");
+io.configure( function(){
+    // io.set('origin', '*');
+    io.set('origins', "*:*" );
+});
+// io.set("origins", "https://yaps.herokuapp.com");
 // io.set("origins","*:*");
 
 // Enables CORS
