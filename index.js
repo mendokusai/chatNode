@@ -25,20 +25,7 @@ var allowCrossDomain = function(req, res, next) {
     }
 };
 
-// app.use(allowCrossDomain);
-
-app.configure(function () {
-  app.use(express.bodyParser());
-  app.use(express.methodOverride());
-  app.use(allowCrossDomain);
-  app.use(app.router);
-  app.use(express.static(path.join(application_root, "public")));
-  app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
-});
-io.configure(function () { 
-  io.set("transports", ["xhr-polling"]); 
-  io.set("polling duration", 10); 
-});
+app.use(allowCrossDomain);
 
 // // var username = confirm("Username?");
 // var url = "http://yaps.herokuapp.com/"
