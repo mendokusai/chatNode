@@ -16,6 +16,8 @@ var app = require('express')();
 var http = require('http').Server(app);
 var io = require('socket.io')(http, { origins: "http://yaps.herokuapp.com/" });
 
+var cors = require('cors'); app.use(cors());
+
 // io.set('transports', [            // all transports (optional if you want flashsocket)
 //         'websocket'
 //         , 'flashsocket'
