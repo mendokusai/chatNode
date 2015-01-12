@@ -2,6 +2,10 @@ var app = require('express')();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 
+app.listen(process.env.PORT || 3000, function(){
+  console.log("Express server listening on port %d in %s mode", this.address().port, app.settings.env);
+});
+
 app.set('transports', [
     	'websocket',
     	'flashsocket',
@@ -37,6 +41,9 @@ app.use(allowCrossDomain);
 console.log("\n\n\n\n\n\n\n\n\n\n\n\n", app, "\n\n\n\n\n\n\n\n\n\n\n\n\n");
 
 console.log("\n\n\n\n\n\nWHAT THE FUCK\n\n\n\n\n\n")
+
+
+
 
 // var url = "/";
 
