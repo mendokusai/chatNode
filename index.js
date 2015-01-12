@@ -19,9 +19,10 @@ app.set('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Le
 
 // // var username = confirm("Username?");
 // var url = "http://yaps.herokuapp.com/"
+console.log("\n\n\n\n\n\nWHAT THE FUCK\n\n\n\n\n\n")
+debugger;
 
-var url = "/"
-
+var url = "/";
 
 app.get(url, function(req, res){
   res.sendfile('index.html');
