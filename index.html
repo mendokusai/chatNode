@@ -23,16 +23,16 @@
     <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
     <script src="https://socket.io/socket.io.js"></script>
 <script>
-  console.log("wlknalknskn");
-  var socket = io("https://yapsnode.herokuapp.com/");
-  $('form').submit(function(){
-    socket.emit('chat message', $('#m').val());
-    $('#m').val('');
-    return false;
-  });
-  socket.on('chat message', function(msg){
-    $('#messages').append($('<li>').text(msg));
-  });
+  // console.log("wlknalknskn");
+  // var socket = io("https://yapsnode.herokuapp.com/");
+  // $('form').submit(function(){
+  //   socket.emit('chat message', $('#m').val());
+  //   $('#m').val('');
+  //   return false;
+  // });
+  // socket.on('chat message', function(msg){
+  //   $('#messages').append($('<li>').text(msg));
+  // });
 </script>
 
   </body>
