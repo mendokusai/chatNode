@@ -3,14 +3,29 @@ var app = require('express')();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 
+
+var mainURL, nodeURL, whitelist;
+
+var env = process.env.NODE_ENV || 'development'
+if (env === 'development') {
+    nodeURL = 'http://localhost:3002',
+    mainURL = 'http://localhost:3000',
+    whitelist = [mainURL, nodeURL, mainURL, nodeURL];
+} else{
+    nodeURL = 'http://yapsnode.herokuapp.com',
+    mainURL = 'http://yaps.herokuapp.com',
+    whitelist = [mainURL, nodeURL, mainURL, nodeURL];
+};
+
+
 // http.listen(80);
-http.listen(config.port, function () {
-    console.log('Express server listening on port %d in %s mode', config.port, app.get('env'));
+http.listen(process.env.PORT || 3001, function () {
+    console.log('Express server listening on port %d in %s mode', env.mainURL, app.get('env'));
 });
 
 // app.use( cors() );
 
-app.listen(process.env.PORT || 3000, function(){
+app.listen(8888, function(){
   console.log("Express server listening on port %d in %s mode", this.address().port, app.settings.env);
 });
 
@@ -23,7 +38,7 @@ app.set('transports', [
     ]);
 
 var allowCrossDomain = function(req, res, next) {
-    res.header('Access-Control-Allow-Origin', 'http://yaps.herokuapp.com');
+    res.header('Access-Control-Allow-Origin', mainURL);
     res.header('Access-Control-Allow-Credentials', true);
     res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
     res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');
@@ -39,7 +54,6 @@ var allowCrossDomain = function(req, res, next) {
 app.use(allowCrossDomain);
 
 
-var whitelist = ['http://yaps.herokuapp.com', 'http://yapsnode.herokuapp.com', 'https://yaps.herokuapp.com', 'https://yapsnode.herokuapp.com'];
 
 var corsOptions = {
   origin: function(origin, callback){
