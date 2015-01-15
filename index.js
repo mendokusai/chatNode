@@ -71,8 +71,9 @@ var url = "/";
 app.get(url, cors(corsOptions), function(req, res){
   res.sendfile('index.html');
 });
-var allUSERS =[];
-var socket_username;
+var allUSERS =[],
+    socket_username,
+    socket_room;
 
 
 function logout(user, allUSERS){
@@ -84,6 +85,23 @@ function logout(user, allUSERS){
 }
 //on connection, get data
 io.on('connection', function(socket){
+    
+
+    socket.on('change room', function(change_room){
+        socket_room = change_room.room;
+        console.log("Changeroom data: " + change_room[0] + change_room[1]);
+        socket.join(change_room.room);
+        msg = {
+            stamp: new Date().toLocaleTimeString(),
+            socket_room: socket_room,
+            name: change_room.name,
+            url: "none",
+            image: "none",
+            text: "has moved to " + change_room.room
+        }
+        io.emit('chat message room change', msg);
+        socket.emit('room details', change_room);
+    });
 
     socket.on('user config', function(data){
         socket_username = data.username;
@@ -120,12 +138,27 @@ io.on('connection', function(socket){
 
 	});
 
-// post message
+// post message to lobby
     socket.on('chat message', function(msg){
         console.log('Post At: ' + msg.date + ' User: ' + msg.name + ' Text: ' + msg.text);
         msg.name = msg.name;
         msg.text = _.escape(msg.text);
         io.emit('chat message', msg);
+    });
+
+// post message to user room
+    socket.on('chat message', function(msg){
+        console.log('Post At: ' + msg.date + ' User: ' + msg.name + ' Text: ' + msg.text);
+        msg.name = msg.name;
+        msg.text = _.escape(msg.text);
+        io.to(socket_room).emit('chat message', msg);
+    });
+
+    socket.on('chat message in room', function (msg) {
+        console.log('\n\nPost At: ' + msg.date + '\n User: ' + msg.name + '\n Text: ' + msg.text + '\n Room: ' + msg.socket_room + "\n\n");
+        msg.name = msg.name;
+        msg.text = _.escape(msg.text);
+        io.to(socket_room).emit('chat message', msg);
     });
 
 //at enter
