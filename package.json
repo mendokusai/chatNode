@@ -16,6 +16,6 @@
     "express": "^4.10.2",
     "socket.io": "^1.2.1",
     "cors": "*",
-    "underscore" "1.7.0"
+    "underscore": "1.7.0"
   }
 }
