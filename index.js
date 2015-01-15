@@ -57,12 +57,7 @@ var allowCrossDomain = function(req, res, next) {
 
 app.use(allowCrossDomain);
 
-function logout(user, allUSERS){
-    var user_index = allUSERS.indexOf(user);
-    if (user_index > -1){
-        allUSERS.splice(user_index, 1);
-    };
-}
+
 
 var corsOptions = {
   origin: function(origin, callback){
@@ -79,13 +74,16 @@ app.get(url, cors(corsOptions), function(req, res){
 var allUSERS =[];
 var socket_username;
 
+
+function logout(user, allUSERS){
+    var user_index = allUSERS.indexOf(user);
+    if (user_index > -1){
+        allUSERS.splice(user_index, 1);
+    };
+    return allUSERS;
+}
 //on connection, get data
 io.on('connection', function(socket){
-    
-
-    socket.on('all users', function(array){
-        console.log(allUSERS);
-    });
 
     socket.on('user config', function(data){
         socket_username = data.username;
@@ -101,11 +99,12 @@ io.on('connection', function(socket){
             image: "none",
             text: "has entered the chat."
         }
-        io.emit('chat message', msg)
+        io.emit('chat message', msg);
+        io.emit('all users', allUSERS);
     });
 // connection message send
 	console.log('a user connected' + new Date().toLocaleString());
-    socket.on('disconnect', function(msg, allUSERS){
+    socket.on('disconnect', function(msg){
         msg = {
         stamp: new Date().toLocaleTimeString(),
         name: socket_username,
@@ -113,16 +112,18 @@ io.on('connection', function(socket){
         image: "none",
         text: "has left the chatroom."
         }
-        // logout(socket.id, allUSERS);
+        logout(socket_username, allUSERS);
         console.log("allUsers: " + allUSERS);
 		io.emit('chat message', msg);
         io.emit('user disconnected', msg);
+        io.emit('all users', allUSERS);
+
 	});
 
 // post message
     socket.on('chat message', function(msg){
         console.log('Post At: ' + msg.date + ' User: ' + msg.name + ' Text: ' + msg.text);
-        msg.name = socket_username;
+        msg.name = msg.name;
         msg.text = _.escape(msg.text);
         io.emit('chat message', msg);
     });
