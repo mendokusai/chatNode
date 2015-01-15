@@ -2,6 +2,10 @@ var cors = require('cors');
 var app = require('express')();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
+var _ = require('underscore');
+// var redis = require('redis-node'); //https://github.com/bnoguchi/redis-node
+
+// var client = redis.createClient();
 
 
 var mainURL, nodeURL, whitelist;
@@ -53,7 +57,12 @@ var allowCrossDomain = function(req, res, next) {
 
 app.use(allowCrossDomain);
 
-
+function logout(user, allUSERS){
+    var user_index = allUSERS.indexOf(user);
+    if (user_index > -1){
+        allUSERS.splice(user_index, 1);
+    };
+}
 
 var corsOptions = {
   origin: function(origin, callback){
@@ -67,41 +76,84 @@ var url = "/";
 app.get(url, cors(corsOptions), function(req, res){
   res.sendfile('index.html');
 });
+var allUSERS =[];
+var socket_username;
 
+//on connection, get data
 io.on('connection', function(socket){
-	console.log('a user connected');
-	socket.on('disconnect', function(){
-		console.log('user disconnected');
-	});
-});
+    
 
-io.on('connection', function(socket){
-	socket.on('chat message', function(msg){
-		console.log('message: ' + msg);
+    socket.on('all users', function(array){
+        console.log(allUSERS);
+    });
+
+    socket.on('user config', function(data){
+        socket_username = data.username;
+        // console.log(socket.id + ":" + socket.username);
+        // console.log(allUSERS);
+        allUSERS.push(socket_username);
+        // console.log("\n\n\n\nTEST", allUSERS, "\n\n\n\n");
+        // console.log("Username: " + username);
+        msg = {
+            stamp: new Date().toLocaleTimeString(),
+            name: socket_username,
+            url: "none",
+            image: "none",
+            text: "has entered the chat."
+        }
+        io.emit('chat message', msg)
+    });
+// connection message send
+	console.log('a user connected' + new Date().toLocaleString());
+    socket.on('disconnect', function(msg, allUSERS){
+        msg = {
+        stamp: new Date().toLocaleTimeString(),
+        name: socket_username,
+        url: "none",
+        image: "none",
+        text: "has left the chatroom."
+        }
+        // logout(socket.id, allUSERS);
+        console.log("allUsers: " + allUSERS);
+		io.emit('chat message', msg);
+        io.emit('user disconnected', msg);
 	});
+
+// post message
+    socket.on('chat message', function(msg){
+        console.log('Post At: ' + msg.date + ' User: ' + msg.name + ' Text: ' + msg.text);
+        msg.name = socket_username;
+        msg.text = _.escape(msg.text);
+        io.emit('chat message', msg);
+    });
+
+//at enter
+// broadcast to everyone except for certain socket *this doesn't work!
+
+    // msg = {
+    //     stamp: new Date().toLocaleTimeString(),
+    //     name: socket.username,
+    //     url: "none",
+    //     image: "none",
+    //     text: "has entered the arena."
+    // }
+
+    // console.log("\n\n\n\nTEST", msg.name, "\n\n\n\n");
+
+
+    //socket.broadcast
+    // io.emit('chat message', msg);
+
+//this is posting the message
+    socket.on('chat message', function(msg){
+        console.log('Post At: ' + msg.date + ' User: ' + msg.name + ' Text: ' + msg.text);
+    });
 });
 
 // // // broadcast to all
 // // io.emit('some event', { for: 'everyone' });
 
-// // // broadcast to everyone except for certain socket
-// // io.on('connection', function(socket){
-// // 	socket.broadcast.emit('hi');
-// // });
-
-io.on('connection', function(socket){
-	socket.on('chat message', function(msg){
-		io.emit('chat message', msg);
-	});
-});
-
-// // http.listen(3001, function(){
-// //   console.log('listening on *:3001');
-// // });
 
 
-// http.listen(url, function(){
-//   console.log('listening to' + url);
-// });
 
-// // io.connect('http://yaps.herokuapp.com');
+
