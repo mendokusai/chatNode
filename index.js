@@ -22,12 +22,9 @@ if (env === 'development') {
 };
 
 
-// http.listen(80);
 http.listen(process.env.PORT || 3001, function () {
     console.log('Express server listening on port %d in %s mode', env.mainURL, app.get('env'));
 });
-
-// app.use( cors() );
 
 app.listen(8888, function(){
   console.log("Express server listening on port %d in %s mode", this.address().port, app.settings.env);
@@ -98,7 +95,6 @@ io.on('connection', function(socket){
     socket.join(socket_room);
 
     socket.on('random chat', function(data){
-        console.log("Random Button PRESSED: ", data.username);
 
         do {
             if (random_chat.length === 3){
@@ -125,16 +121,13 @@ io.on('connection', function(socket){
                     image: "none",
                     text: "Welcome to Random Chat!"
                     };
-                    
+
                 io.to(socket_room).emit('chat message room change', msg);
                 socket.emit('room details', change_room);
             };
-            console.log(random_chat);
 
         } while (random_chat <= 3);
-        
-        // message = "Random: " + room + ". random-chat array: " + random_chat.length;
-        // socket.emit('random chat', message);
+
     });
 
     socket.on('change room', function(change_room){
@@ -155,11 +148,9 @@ io.on('connection', function(socket){
 
     socket.on('user config', function(data){
         socket_username = data.username;
-        // console.log(socket.id + ":" + socket.username);
-        // console.log(allUSERS);
+
         allUSERS.push(socket_username);
-        // console.log("\n\n\n\nTEST", allUSERS, "\n\n\n\n");
-        // console.log("Username: " + username);
+
         msg = {
             stamp: new Date().toLocaleTimeString(),
             name: socket_username,
@@ -198,17 +189,6 @@ io.on('connection', function(socket){
 
 	});
 
-// post message to lobby
-    // socket.on('chat message', function(msg){
-    //     console.log('Post At: ' + msg.date + ' User: ' + msg.name + ' Text: ' + msg.text);
-    //     msg.name = msg.name;
-    //     msg.text = _.escape(msg.text);
-    //     if (socket_room){
-    //         socket.emit('chat message', msg);    
-    //     } else{
-    //         io.emit('chat message', msg);
-    //     };
-    // });
 
 // post message to user room
     socket.on('chat message', function(msg){
@@ -225,32 +205,8 @@ io.on('connection', function(socket){
         io.to(socket_room).emit('chat message', msg);
     });
 
-//at enter
-// broadcast to everyone except for certain socket *this doesn't work!
 
-    // msg = {
-    //     stamp: new Date().toLocaleTimeString(),
-    //     name: socket.username,
-    //     url: "none",
-    //     image: "none",
-    //     text: "has entered the arena."
-    // }
-
-    // console.log("\n\n\n\nTEST", msg.name, "\n\n\n\n");
-
-
-    //socket.broadcast
-    // io.emit('chat message', msg);
-
-//this is posting the message
-    // socket.on('chat message', function(msg){
-    //     console.log('Post At: ' + msg.date + ' User: ' + msg.name + ' Text: ' + msg.text);
-    // });
 });
-
-// // // broadcast to all
-// // io.emit('some event', { for: 'everyone' });
-
 
 
 
