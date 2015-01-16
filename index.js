@@ -85,7 +85,8 @@ function logout(user, allUSERS){
 }
 //on connection, get data
 io.on('connection', function(socket){
-    
+    socket_room = "lobby";
+    socket.join(socket_room);
 
     socket.on('change room', function(change_room){
         socket_room = change_room.room;
@@ -97,9 +98,9 @@ io.on('connection', function(socket){
             name: change_room.name,
             url: "none",
             image: "none",
-            text: "has moved to " + change_room.room
+            text: "has left the room."
         }
-        io.emit('chat message room change', msg);
+        io.to(socket_room).emit('chat message room change', msg);
         socket.emit('room details', change_room);
     });
 
@@ -117,7 +118,17 @@ io.on('connection', function(socket){
             image: "none",
             text: "has entered the chat."
         }
-        io.emit('chat message', msg);
+        io.to(socket_room).emit('chat message', msg);
+
+        botmsg = {
+            stamp: new Date().toLocaleTimeString(),
+            name: "YapsBot",
+            url: "none",
+            image: "none",
+            text: 'if you need help type "/help" to see your options.'
+        }
+        socket.emit('chat message', botmsg);
+
         io.emit('all users', allUSERS);
     });
 // connection message send
@@ -139,19 +150,23 @@ io.on('connection', function(socket){
 	});
 
 // post message to lobby
-    socket.on('chat message', function(msg){
-        console.log('Post At: ' + msg.date + ' User: ' + msg.name + ' Text: ' + msg.text);
-        msg.name = msg.name;
-        msg.text = _.escape(msg.text);
-        io.emit('chat message', msg);
-    });
+    // socket.on('chat message', function(msg){
+    //     console.log('Post At: ' + msg.date + ' User: ' + msg.name + ' Text: ' + msg.text);
+    //     msg.name = msg.name;
+    //     msg.text = _.escape(msg.text);
+    //     if (socket_room){
+    //         socket.emit('chat message', msg);    
+    //     } else{
+    //         io.emit('chat message', msg);
+    //     };
+    // });
 
 // post message to user room
     socket.on('chat message', function(msg){
         console.log('Post At: ' + msg.date + ' User: ' + msg.name + ' Text: ' + msg.text);
         msg.name = msg.name;
         msg.text = _.escape(msg.text);
-        io.to(socket_room).emit('chat message', msg);
+        io.in("lobby").emit('chat message', msg);
     });
 
     socket.on('chat message in room', function (msg) {
@@ -179,9 +194,9 @@ io.on('connection', function(socket){
     // io.emit('chat message', msg);
 
 //this is posting the message
-    socket.on('chat message', function(msg){
-        console.log('Post At: ' + msg.date + ' User: ' + msg.name + ' Text: ' + msg.text);
-    });
+    // socket.on('chat message', function(msg){
+    //     console.log('Post At: ' + msg.date + ' User: ' + msg.name + ' Text: ' + msg.text);
+    // });
 });
 
 // // // broadcast to all
