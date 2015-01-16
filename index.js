@@ -71,9 +71,17 @@ var url = "/";
 app.get(url, cors(corsOptions), function(req, res){
   res.sendfile('index.html');
 });
+
 var allUSERS =[],
     socket_username,
-    socket_room;
+    socket_room,
+    random_chat = [],
+    room;
+
+function randomRoom() {
+    var room = Math.floor(Math.random() * 200);
+    return room;
+}
 
 
 function logout(user, allUSERS){
@@ -83,10 +91,51 @@ function logout(user, allUSERS){
     };
     return allUSERS;
 }
+
 //on connection, get data
 io.on('connection', function(socket){
     socket_room = "lobby";
     socket.join(socket_room);
+
+    socket.on('random chat', function(data){
+        console.log("Random Button PRESSED: ", data.username);
+
+        do {
+            if (random_chat.length === 3){
+                random_chat = [];
+            } 
+            if (random_chat.length == 0){
+                room = randomRoom();
+            }
+            if (random_chat.length <= 2){
+                random_chat.push(data.username);
+
+                socket_room = randomRoom;
+                socket.join(socket_room);
+                
+                change_room = {
+                    room: socket_room,
+                    name: data.username
+                };
+                msg = {
+                    stamp: new Date().toLocaleTimeString(),
+                    socket_room: socket_room,
+                    name: data.username,
+                    url: "none",
+                    image: "none",
+                    text: "Welcome to Random Chat!"
+                    };
+                    
+                io.to(socket_room).emit('chat message room change', msg);
+                socket.emit('room details', change_room);
+            };
+            console.log(random_chat);
+
+        } while (random_chat <= 3);
+        
+        // message = "Random: " + room + ". random-chat array: " + random_chat.length;
+        // socket.emit('random chat', message);
+    });
 
     socket.on('change room', function(change_room){
         socket_room = change_room.room;
