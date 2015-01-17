@@ -93,6 +93,32 @@ function logout(user, allUSERS){
 io.on('connection', function(socket){
     socket_room = "lobby";
     socket.join(socket_room);
+    var msg;
+    socket.on('user config', function(data){
+        console.log("User Data received!", data.username);
+        socket_username = data.username;
+
+        allUSERS.push(socket_username);
+
+        msg = {
+            stamp: new Date().toLocaleTimeString(),
+            name: socket_username,
+            text: "has entered the chat."
+        }
+        io.to(socket_room).emit('chat message room change', msg);
+
+        botmsg = {
+            stamp: new Date().toLocaleTimeString(),
+            name: "YapsBot",
+            url: "none",
+            image: "none",
+            text: 'if you need help type "/help" to see your options.'
+        }
+        socket.emit('chat message', botmsg);
+
+        io.to(socket_room).emit('all users', allUSERS);
+    });
+    
 
     socket.on('random chat', function(data){
 
@@ -131,6 +157,7 @@ io.on('connection', function(socket){
     });
 
     socket.on('change room', function(change_room){
+
         socket_room = change_room.room;
         console.log("Changeroom data: " + change_room[0] + change_room[1]);
         socket.join(change_room.room);
@@ -138,39 +165,15 @@ io.on('connection', function(socket){
             stamp: new Date().toLocaleTimeString(),
             socket_room: socket_room,
             name: change_room.name,
-            url: "none",
-            image: "none",
             text: "has left the room."
         }
-        io.to(socket_room).emit('chat message room change', msg);
+        io.to(change_room.last_room).emit('chat message room change', msg);
         socket.emit('room details', change_room);
+        msg.text = "has entered the chat."
+        io.to(socket_room).emit('chat message room change', msg);
     });
 
-    socket.on('user config', function(data){
-        socket_username = data.username;
 
-        allUSERS.push(socket_username);
-
-        msg = {
-            stamp: new Date().toLocaleTimeString(),
-            name: socket_username,
-            url: "none",
-            image: "none",
-            text: "has entered the chat."
-        }
-        io.to(socket_room).emit('chat message', msg);
-
-        botmsg = {
-            stamp: new Date().toLocaleTimeString(),
-            name: "YapsBot",
-            url: "none",
-            image: "none",
-            text: 'if you need help type "/help" to see your options.'
-        }
-        socket.emit('chat message', botmsg);
-
-        io.emit('all users', allUSERS);
-    });
 // connection message send
 	console.log('a user connected' + new Date().toLocaleString());
     socket.on('disconnect', function(msg){
