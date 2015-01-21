@@ -114,7 +114,7 @@ io.on('connection', function(socket){
             image: "none",
             text: 'if you need help type "/help" to see your options.'
         }
-        socket.emit('chat message', botmsg);
+        socket.emit('chat message room change', botmsg);
 
         io.to(socket_room).emit('all users', allUSERS);
     });
