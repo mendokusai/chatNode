@@ -69,7 +69,7 @@ app.get(url, cors(corsOptions), function(req, res){
   res.sendfile('index.html');
 });
 
-var allUSERS =[],
+var allUSERS ={},
     socket_username,
     socket_room,
     random_chat = [],
@@ -82,15 +82,13 @@ function randomRoom() {
 
 
 function logout(user, allUSERS){
-    console.log("User:", user);
-    console.log('allUSERS:', allUSERS);
-    var user_index = allUSERS.indexOf(user);
-    console.log("index: ", user_index);
-    if (user_index > -1){
-        var removed = allUSERS.splice(user_index, 1);
-    };
-    // return allUSERS;
-    console.log('removed:', removed);
+    // var user_index = allUSERS.indexOf(user);
+    // if (user_index > -1){
+    //     var removed = allUSERS.splice(user_index, 1);
+    // };
+    // // return allUSERS;
+    // console.log('removed:', removed);
+    console.log('no time for love, Dr. Jones');
 }
 
 //on connection, get data
@@ -100,9 +98,9 @@ io.on('connection', function(socket){
     var msg;
     socket.on('user config', function(data){
         console.log("User Data received!", data.username);
-        console.log("user id:", socket.id);
         socket_username = data.username;
-        allUSERS.push(socket.id);
+        allUSERS[socket.id] = {}
+        allUSERS[socket.id].username = socket_username;
         console.log("All Users: ", allUSERS);
         msg = {
             stamp: new Date().toLocaleTimeString(),
@@ -183,7 +181,7 @@ io.on('connection', function(socket){
     
 
     socket.on('disconnect', function(msg){
-        console.log ('this person disconnected:', socket.id);
+        console.log ('this person disconnected:', allUSERS[socket.id]);
         msg = {
         stamp: new Date().toLocaleTimeString(),
         name: socket_username,
@@ -191,8 +189,8 @@ io.on('connection', function(socket){
         image: "none",
         text: "has left the chatroom."
         }
-        logout(socket.id, allUSERS);
-        console.log("allUsers: " + allUSERS);
+        // logout(socket.id, allUSERS);
+        delete allUSERS[socket.id];
 		io.emit('chat message', msg);
         io.emit('user disconnected', msg);
         io.emit('all users', allUSERS);
