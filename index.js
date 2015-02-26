@@ -82,11 +82,15 @@ function randomRoom() {
 
 
 function logout(user, allUSERS){
+    console.log("User:", user);
+    console.log('allUSERS:', allUSERS);
     var user_index = allUSERS.indexOf(user);
+    console.log("index: ", user_index);
     if (user_index > -1){
-        allUSERS.splice(user_index, 1);
+        var removed = allUSERS.splice(user_index, 1);
     };
-    return allUSERS;
+    // return allUSERS;
+    console.log('removed:', removed);
 }
 
 //on connection, get data
@@ -96,10 +100,10 @@ io.on('connection', function(socket){
     var msg;
     socket.on('user config', function(data){
         console.log("User Data received!", data.username);
+        console.log("user id:", socket.id);
         socket_username = data.username;
-
-        allUSERS.push(socket_username);
-
+        allUSERS.push(socket.id);
+        console.log("All Users: ", allUSERS);
         msg = {
             stamp: new Date().toLocaleTimeString(),
             name: socket_username,
@@ -175,8 +179,11 @@ io.on('connection', function(socket){
 
 
 // connection message send
-	console.log('a user connected' + new Date().toLocaleString());
+	console.log('a user connected' + new Date().toLocaleTimeString());
+    
+
     socket.on('disconnect', function(msg){
+        console.log ('this person disconnected:', socket.id);
         msg = {
         stamp: new Date().toLocaleTimeString(),
         name: socket_username,
@@ -184,7 +191,7 @@ io.on('connection', function(socket){
         image: "none",
         text: "has left the chatroom."
         }
-        logout(socket_username, allUSERS);
+        logout(socket.id, allUSERS);
         console.log("allUsers: " + allUSERS);
 		io.emit('chat message', msg);
         io.emit('user disconnected', msg);
