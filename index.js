@@ -4,9 +4,7 @@ var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var _ = require('underscore');
 // var redis = require('redis-node'); //https://github.com/bnoguchi/redis-node
-
 // var client = redis.createClient();
-
 
 var mainURL, nodeURL, whitelist;
 
@@ -20,7 +18,6 @@ if (env === 'development') {
     mainURL = 'http://yaps.herokuapp.com',
     whitelist = [mainURL, nodeURL, mainURL, nodeURL];
 };
-
 
 http.listen(process.env.PORT || 3001, function () {
     console.log('Express server listening on port %d in %s mode', env.mainURL, app.get('env'));
@@ -54,8 +51,6 @@ var allowCrossDomain = function(req, res, next) {
 
 app.use(allowCrossDomain);
 
-
-
 var corsOptions = {
   origin: function(origin, callback){
     var originIsWhitelisted = whitelist.indexOf(origin) !== -1;
@@ -69,7 +64,11 @@ app.get(url, cors(corsOptions), function(req, res){
   res.sendfile('index.html');
 });
 
+
+
+
 var allUSERS ={},
+    rooms = {},
     socket_username,
     socket_room,
     random_chat = [],
@@ -80,27 +79,58 @@ function randomRoom() {
     return room;
 }
 
-
-function logout(user, allUSERS){
-    // var user_index = allUSERS.indexOf(user);
-    // if (user_index > -1){
-    //     var removed = allUSERS.splice(user_index, 1);
-    // };
-    // // return allUSERS;
-    // console.log('removed:', removed);
-    console.log('no time for love, Dr. Jones');
+function add_room_person(room, person, rooms) {
+    if (rooms.hasOwnProperty(room)){
+        rooms[room].push(person);
+    } else {
+        rooms[room] = [person];
+    }
+    console.log(rooms);
 }
+
+function remove_from_rooms(name, rooms){
+            console.log('name', name);
+            var room_list = [];
+            //first get all rooms
+            for (var key in rooms){
+                if (rooms.hasOwnProperty(key)){
+                    console.log("key:", key);
+                    room_list.push(key);
+                }
+            }
+            console.log('roomlist:', room_list);
+            //go through rooms[room_list], 
+            //  index guy, remove guy
+            for (var i = 0; i < room_list.length; i++){
+                var index;
+                index = rooms[room_list[i]].indexOf(name);
+                console.log('index: ', index);
+                if (index > -1){
+                    console.log("index loc: ",rooms[room_list[i]][index]);
+                    rooms[room_list[i]].splice(index, 1);
+                }
+            }
+        }
+
+
+
+
+
+
+
 
 //on connection, get data
 io.on('connection', function(socket){
     socket_room = "lobby";
     socket.join(socket_room);
     var msg;
+
     socket.on('user config', function(data){
         console.log("User Data received!", data.username);
         socket_username = data.username;
         allUSERS[socket.id] = {}
         allUSERS[socket.id].username = socket_username;
+        add_room_person(socket_room, data.username, rooms);
         console.log("All Users: ", allUSERS);
         msg = {
             stamp: new Date().toLocaleTimeString(),
@@ -117,8 +147,7 @@ io.on('connection', function(socket){
             text: 'if you need help type "/help" to see your options.'
         }
         socket.emit('chat message room change', botmsg);
-
-        io.to(socket_room).emit('all users', allUSERS);
+        io.to(socket_room).emit('all users', rooms[socket_room]);
     });
     
 
@@ -159,10 +188,9 @@ io.on('connection', function(socket){
     });
 
     socket.on('change room', function(change_room){
-
         socket_room = change_room.room;
-        console.log("Changeroom data: " + change_room[0] + change_room[1]);
-        socket.join(change_room.room);
+        add_room_person(change_room.room, change_room.name, rooms);
+        socket.join(socket_room);
         msg = {
             stamp: new Date().toLocaleTimeString(),
             socket_room: socket_room,
@@ -170,8 +198,9 @@ io.on('connection', function(socket){
             text: "has left the room."
         }
         io.to(change_room.last_room).emit('chat message room change', msg);
-        socket.emit('room details', change_room);
+        socket.emit('room details', socket_room);
         msg.text = "has entered the chat."
+        io.to(socket_room).emit('all users', rooms[socket_room]);
         io.to(socket_room).emit('chat message room change', msg);
     });
 
@@ -190,10 +219,16 @@ io.on('connection', function(socket){
         text: "has left the chatroom."
         }
         // logout(socket.id, allUSERS);
+        
+        console.log('removing', allUSERS[socket.id].username);
+        remove_from_rooms(allUSERS[socket.id].username, rooms);
         delete allUSERS[socket.id];
+        console.log(rooms);
+        
+
 		io.emit('chat message', msg);
         io.emit('user disconnected', msg);
-        io.emit('all users', allUSERS);
+        io.emit('all users', rooms[socket_room]);
 
 	});
 
