@@ -72,11 +72,25 @@ var allUSERS ={},
     socket_username,
     socket_room,
     random_chat = [],
-    room;
+    room,
+    room_text ={};
+
 
 function randomRoom() {
     var room = Math.floor(Math.random() * 200);
     return room;
+}
+
+function add_text_to_rooms(msg, room, room_text){
+    if (!room_text.hasOwnProperty(room)){
+        room_text[room] = [];
+    }
+    room_text[room].push(msg);
+    
+    if (room_text[room].length > 20) {
+        var extra = room_text[room].length - 20;
+        room_text[room].splice(0, extra);
+    }
 }
 
 function add_room_person(room, person, rooms) {
@@ -85,28 +99,21 @@ function add_room_person(room, person, rooms) {
     } else {
         rooms[room] = [person];
     }
-    console.log(rooms);
 }
 
 function remove_from_rooms(name, rooms){
-            console.log('name', name);
             var room_list = [];
             //first get all rooms
             for (var key in rooms){
                 if (rooms.hasOwnProperty(key)){
-                    console.log("key:", key);
                     room_list.push(key);
                 }
             }
-            console.log('roomlist:', room_list);
-            //go through rooms[room_list], 
-            //  index guy, remove guy
             for (var i = 0; i < room_list.length; i++){
                 var index;
                 index = rooms[room_list[i]].indexOf(name);
-                console.log('index: ', index);
+            
                 if (index > -1){
-                    console.log("index loc: ",rooms[room_list[i]][index]);
                     rooms[room_list[i]].splice(index, 1);
                 }
             }
@@ -147,7 +154,11 @@ io.on('connection', function(socket){
             text: 'if you need help type "/help" to see your options.'
         }
         socket.emit('chat message room change', botmsg);
-        io.to(socket_room).emit('all users', rooms[socket_room]);
+        room_data = {
+            people: rooms[socket_room],
+            messages: room_text[socket_room]
+        }
+        io.to(socket_room).emit('all users', room_data);
     });
     
 
@@ -197,10 +208,16 @@ io.on('connection', function(socket){
             name: change_room.name,
             text: "has left the room."
         }
+
         io.to(change_room.last_room).emit('chat message room change', msg);
         socket.emit('room details', socket_room);
         msg.text = "has entered the chat."
-        io.to(socket_room).emit('all users', rooms[socket_room]);
+
+        room_data = {
+            people: rooms[socket_room],
+            messages: room_text[socket_room]
+        }
+        io.to(socket_room).emit('all users', room_data);
         io.to(socket_room).emit('chat message room change', msg);
     });
 
@@ -213,7 +230,7 @@ io.on('connection', function(socket){
         console.log ('this person disconnected:', allUSERS[socket.id]);
         msg = {
         stamp: new Date().toLocaleTimeString(),
-        name: socket_username,
+        name: allUSERS[socket.id].username,
         url: "none",
         image: "none",
         text: "has left the chatroom."
@@ -223,18 +240,23 @@ io.on('connection', function(socket){
         console.log('removing', allUSERS[socket.id].username);
         remove_from_rooms(allUSERS[socket.id].username, rooms);
         delete allUSERS[socket.id];
-        console.log(rooms);
         
-
 		io.emit('chat message', msg);
         io.emit('user disconnected', msg);
-        io.emit('all users', rooms[socket_room]);
+        console.log('room people?', rooms[socket_room]);
+        room_data = {
+            people: rooms[socket_room],
+        }
+        console.log("Room Data: ", room_data);
+        io.emit('all users', room_data);
 
 	});
 
 
 // post message to user room
     socket.on('chat message', function(msg){
+        //add_text_to_rooms(msg, room, room_text){
+        add_text_to_rooms(msg, socket_room, room_text);
         console.log('Post At: ' + msg.date + ' User: ' + msg.name + ' Text: ' + msg.text);
         msg.name = msg.name;
         msg.text = _.escape(msg.text);
@@ -243,6 +265,7 @@ io.on('connection', function(socket){
 
     socket.on('chat message in room', function (msg) {
         console.log('\n\nPost At: ' + msg.date + '\n User: ' + msg.name + '\n Text: ' + msg.text + '\n Room: ' + msg.socket_room + "\n\n");
+        add_text_to_rooms(msg, socket_room, room_text);
         msg.name = msg.name;
         msg.text = _.escape(msg.text);
         io.to(socket_room).emit('chat message', msg);
