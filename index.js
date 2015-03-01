@@ -94,11 +94,22 @@ function add_text_to_rooms(msg, room, room_text){
 }
 
 function add_room_person(room, person, rooms) {
+    console.log('rooms: ', rooms);
+    console.log('room true?', rooms.hasOwnProperty(room));
     if (rooms.hasOwnProperty(room)){
         rooms[room].push(person);
     } else {
         rooms[room] = [person];
+        console.log('rooms', rooms);
     }
+}
+
+function remove_from_room(name, room, rooms){
+    console.log('name:', name);
+    console.log('room:', room);
+    console.log('rooms:', rooms);
+    var person = rooms[room].indexOf(name);
+    rooms[room].splice(person, 1);
 }
 
 function remove_from_rooms(name, rooms){
@@ -199,8 +210,10 @@ io.on('connection', function(socket){
     });
 
     socket.on('change room', function(change_room){
-        socket_room = change_room.room;
+        console.log('Rooms: ', rooms);
+        remove_from_room(change_room.name, change_room.last_room, rooms);
         add_room_person(change_room.room, change_room.name, rooms);
+        socket_room = change_room.room;
         socket.join(socket_room);
         msg = {
             stamp: new Date().toLocaleTimeString(),
