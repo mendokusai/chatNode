@@ -85,7 +85,7 @@ function add_text_to_rooms(msg, room, room_text){
     if (!room_text.hasOwnProperty(room)){
         room_text[room] = [];
     }
-    room_text[room].push(msg);
+    room_text[room].unshift(msg);
     
     if (room_text[room].length > 20) {
         var extra = room_text[room].length - 20;
@@ -153,7 +153,7 @@ io.on('connection', function(socket){
         msg = {
             stamp: new Date().toLocaleTimeString(),
             name: socket_username,
-            text: "has entered the chat."
+            text: "has entered Yaps."
         }
         io.to(socket_room).emit('chat message room change', msg);
 
@@ -166,7 +166,7 @@ io.on('connection', function(socket){
         }
         socket.emit('chat message room change', botmsg);
         room_data = {
-            people: rooms[socket_room],
+            people: rooms,
             messages: room_text[socket_room]
         }
         io.to(socket_room).emit('all users', room_data);
@@ -209,6 +209,33 @@ io.on('connection', function(socket){
 
     });
 
+    socket.on('direct chat', function(change_room){
+        remove_from_room(change_room.name1, change_room.last_room, rooms);
+        add_room_person(change_room.room, change_room.name1, rooms);
+        add_room_person(change_room.room, change_room.name2, rooms);
+        socket_room = change_room.room;
+        socket.join(socket_room);
+        msg = {
+            stamp: new Date().toLocaleTimeString(),
+            socket_room: socket_room,
+            name: change_room.name1,
+            text: "has left the room."
+        }
+
+        io.to(change_room.last_room).emit('chat message room change', msg);
+        socket.emit('room details', socket_room);
+        msg.text = "has entered the chat."
+
+        room_data = {
+            people: rooms,
+            messages: room_text[socket_room]
+        }
+        io.to(socket_room).emit('all users', room_data);
+        //send updated room list to person 2 using user name and allUsers
+        console.log("allusers", allUSERS);
+        io.to(socket_room).emit('chat message room change', msg);
+    });
+
     socket.on('change room', function(change_room){
         console.log('Rooms: ', rooms);
         remove_from_room(change_room.name, change_room.last_room, rooms);
@@ -227,7 +254,7 @@ io.on('connection', function(socket){
         msg.text = "has entered the chat."
 
         room_data = {
-            people: rooms[socket_room],
+            people: rooms,
             messages: room_text[socket_room]
         }
         io.to(socket_room).emit('all users', room_data);
@@ -248,20 +275,19 @@ io.on('connection', function(socket){
         image: "none",
         text: "has left the chatroom."
         }
-        // logout(socket.id, allUSERS);
         
         console.log('removing', allUSERS[socket.id].username);
         remove_from_rooms(allUSERS[socket.id].username, rooms);
         delete allUSERS[socket.id];
         
-		io.emit('chat message', msg);
-        io.emit('user disconnected', msg);
+		io.to(socket_room).emit('chat message', msg);
+        io.to(socket_room).emit('user disconnected', msg);
         console.log('room people?', rooms[socket_room]);
         room_data = {
             people: rooms[socket_room],
         }
         console.log("Room Data: ", room_data);
-        io.emit('all users', room_data);
+        io.to(socket_room).emit('all users', room_data);
 
 	});
 
@@ -273,7 +299,7 @@ io.on('connection', function(socket){
         console.log('Post At: ' + msg.date + ' User: ' + msg.name + ' Text: ' + msg.text);
         msg.name = msg.name;
         msg.text = _.escape(msg.text);
-        io.in("lobby").emit('chat message', msg);
+        io.to(socket_room).emit('chat message', msg);
     });
 
     socket.on('chat message in room', function (msg) {
