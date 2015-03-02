@@ -3,6 +3,7 @@ var app = require('express')();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var _ = require('underscore');
+io.set('log level', 1)
 // var redis = require('redis-node'); //https://github.com/bnoguchi/redis-node
 // var client = redis.createClient();
 
@@ -73,7 +74,8 @@ var allUSERS ={},
     socket_room,
     random_chat = [],
     room,
-    room_text ={};
+    room_text ={},
+    user_index = {};
 
 
 function randomRoom() {
@@ -130,7 +132,10 @@ function remove_from_rooms(name, rooms){
             }
         }
 
-
+function get_user_id(user_list, person){
+            var id = user_list[person];
+            return id;
+        }
 
 
 
@@ -148,6 +153,7 @@ io.on('connection', function(socket){
         socket_username = data.username;
         allUSERS[socket.id] = {}
         allUSERS[socket.id].username = socket_username;
+        user_index[socket_username] = [socket.id];
         add_room_person(socket_room, data.username, rooms);
         console.log("All Users: ", allUSERS);
         msg = {
@@ -213,6 +219,7 @@ io.on('connection', function(socket){
         remove_from_room(change_room.name1, change_room.last_room, rooms);
         add_room_person(change_room.room, change_room.name1, rooms);
         add_room_person(change_room.room, change_room.name2, rooms);
+        remove_from_room(change_room.name2, change_room.room, rooms);
         socket_room = change_room.room;
         socket.join(socket_room);
         msg = {
@@ -233,6 +240,16 @@ io.on('connection', function(socket){
         io.to(socket_room).emit('all users', room_data);
         //send updated room list to person 2 using user name and allUsers
         console.log("allusers", allUSERS);
+        var person_id = get_user_id(user_index, change_room.name2);
+        direct_data = {
+          message: 'you are not cool.',
+          room: change_room.room    
+        }
+        socket.broadcast.to(person_id).emit('direct message', direct_data);
+        room_data = {
+            people: rooms,
+        }
+        socket.broadcast.to(person_id).emit('all users', room_data)
         io.to(socket_room).emit('chat message room change', msg);
     });
 
