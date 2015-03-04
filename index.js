@@ -239,7 +239,6 @@ io.on('connection', function(socket){
         }
         io.to(socket_room).emit('all users', room_data);
         //send updated room list to person 2 using user name and allUsers
-        console.log("allusers", allUSERS);
         var person_id = get_user_id(user_index, change_room.name2);
         direct_data = {
           message: 'you are not cool.',
@@ -254,7 +253,6 @@ io.on('connection', function(socket){
     });
 
     socket.on('change room', function(change_room){
-        console.log('Rooms: ', rooms);
         remove_from_room(change_room.name, change_room.last_room, rooms);
         add_room_person(change_room.room, change_room.name, rooms);
         socket_room = change_room.room;
@@ -293,17 +291,14 @@ io.on('connection', function(socket){
         text: "has left the chatroom."
         }
         
-        console.log('removing', allUSERS[socket.id].username);
         remove_from_rooms(allUSERS[socket.id].username, rooms);
         delete allUSERS[socket.id];
         
 		io.to(socket_room).emit('chat message', msg);
         io.to(socket_room).emit('user disconnected', msg);
-        console.log('room people?', rooms[socket_room]);
         room_data = {
             people: rooms[socket_room],
         }
-        console.log("Room Data: ", room_data);
         io.to(socket_room).emit('all users', room_data);
 
 	});
